@@ -3,7 +3,7 @@
 use JqlBuilder\Jql;
 
 it('can generate query', function () {
-    $builder = new Jql();
+    $builder = new Jql;
 
     $query = $builder->where('project', '=', 'MY PROJECT')->getQuery();
 
@@ -11,7 +11,7 @@ it('can generate query', function () {
 
     expect($query)->toBe($expected);
 
-    $builder = new Jql();
+    $builder = new Jql;
 
     $query = $builder
         ->where('project', '=', 'MY PROJECT')
@@ -28,7 +28,7 @@ it('can generate query', function () {
 
     expect($query)->toBe($expected);
 
-    $builder = new Jql();
+    $builder = new Jql;
 
     $query = (string) $builder
         ->where('project', 'MY PROJECT')
@@ -48,7 +48,7 @@ it('can generate query', function () {
 });
 
 it('can generate raw query', function () {
-    $query = (string) (new Jql())->rawQuery('project = "MY PROJECT"');
+    $query = (string) (new Jql)->rawQuery('project = "MY PROJECT"');
 
     $expected = 'project = "MY PROJECT"';
 
@@ -57,7 +57,7 @@ it('can generate raw query', function () {
 
 it('can generate query with grouped conditions', function () {
     $actualQueries = [
-        (new Jql())->where('creator', '=', '1646667083862@mailinator.com')
+        (new Jql)->where('creator', '=', '1646667083862@mailinator.com')
             ->where(function (Jql $builder) {
                 $builder->where('project', '=', 'A')
                     ->where('status', '=', '"Closed"');
@@ -66,7 +66,7 @@ it('can generate query with grouped conditions', function () {
                 $builder->where('project', '=', '"B"')
                     ->where('status', '!=', 'Closed');
             })->getQuery(),
-        (new Jql())->where(function (Jql $builder) {
+        (new Jql)->where(function (Jql $builder) {
             $builder->where('project', '=', 'A')
                 ->where('status', '=', 'Closed');
         })->orWhere(function (Jql $builder) {
@@ -84,7 +84,7 @@ it('can generate query with grouped conditions', function () {
 });
 
 it('will quote custom field that contains spaces', function () {
-    $query = (new Jql())->where('project name', '=', 'MY PROJECT')->getQuery();
+    $query = (new Jql)->where('project name', '=', 'MY PROJECT')->getQuery();
 
     $expected = '"project name" = "MY PROJECT"';
 
@@ -92,7 +92,7 @@ it('will quote custom field that contains spaces', function () {
 });
 
 it('can add macro', function () {
-    $builder = new Jql();
+    $builder = new Jql;
 
     $builder::macro('whereCustom', function (mixed $value) {
         /** @var Jql $this */
@@ -108,15 +108,15 @@ it('can add macro', function () {
 });
 
 it('will throw exception when invalid boolean passed', function () {
-    (new Jql())->where('project', '=', 'MY PROJECT', '=');
+    (new Jql)->where('project', '=', 'MY PROJECT', '=');
 })->throws(InvalidArgumentException::class, 'Illegal boolean [=] value. only [and, or] is acceptable');
 
 it('will throw exception when invalid operator passed', function () {
-    (new Jql())->where('project', '=', ['MY PROJECT']);
+    (new Jql)->where('project', '=', ['MY PROJECT']);
 })->throws(InvalidArgumentException::class, 'Illegal operator [=] value. only [in, not in, was in, was not in] is acceptable when $value type is array');
 
 it('can reset the current query', function () {
-    $query = new Jql();
+    $query = new Jql;
 
     $query->where('project', 'name');
 
